@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block auth %}
+<section class="auth-card wide">
+  <h1>Rejestracja</h1>
+  <p>Utworz konto z unikalnym loginem i emailem.</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary w-100">Utworz konto</button>
+  </form>
+  <a href="{% url 'login' %}">Mam juz konto</a>
+</section>
+{% endblock %}

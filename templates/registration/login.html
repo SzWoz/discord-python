@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block auth %}
+<section class="auth-card">
+  <h1>GuildChat</h1>
+  <p>Zaloguj sie, aby wejsc do serwera.</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary w-100">Zaloguj</button>
+  </form>
+  <a href="{% url 'register' %}">Nie masz konta? Zarejestruj sie</a>
+</section>
+{% endblock %}

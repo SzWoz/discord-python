@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="empty-state">
+  <h1>404</h1>
+  <p>Nie znaleziono strony.</p>
+  <a class="btn btn-primary" href="{% url 'home' %}">Wroc do aplikacji</a>
+</section>
+{% endblock %}
+{% block auth %}
+<section class="auth-card">
+  <h1>404</h1>
+  <p>Nie znaleziono strony.</p>
+  <a class="btn btn-primary w-100" href="{% url 'login' %}">Logowanie</a>
+</section>
+{% endblock %}

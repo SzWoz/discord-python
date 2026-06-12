@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-page">
+  <h1>Profil</h1>
+  <form method="post" enctype="multipart/form-data" class="panel-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary">Zapisz</button>
+  </form>
+  <form method="post" action="{% url 'logout' %}" class="mt-3">
+    {% csrf_token %}
+    <button class="btn btn-outline-secondary">Wyloguj</button>
+  </form>
+</div>
+{% endblock %}

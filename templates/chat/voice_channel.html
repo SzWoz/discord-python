@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="chat-header">
+  <div>
+    <h1>🔊 {{ channel.name }}</h1>
+    <p>{{ channel.description|default:"Kanal glosowy" }}</p>
+  </div>
+  {% if not is_member %}
+    <a class="btn btn-primary" href="{% url 'join_channel' channel.id %}">Dolacz do kanalu</a>
+  {% endif %}
+</header>
+<section class="voice-panel" data-voice-channel="{{ channel.id }}" data-voice-allowed="{% if is_member and not user.is_blocked %}1{% else %}0{% endif %}">
+  <div class="voice-stage">
+    <div class="voice-tile local">
+      <div class="voice-avatar">{{ user.username|first|upper }}</div>
+      <div>
+        <strong>{{ user.username }}</strong>
+        <small>Ty</small>
+      </div>
+      <span class="voice-state" data-local-state>Rozlaczony</span>
+    </div>
+    <div class="voice-tile remote">
+      <div class="voice-avatar muted">?</div>
+      <div>
+        <strong data-remote-name>Drugi uzytkownik</strong>
+        <small data-remote-state>Oczekiwanie na druga osobe</small>
+      </div>
+    </div>
+  </div>
+  <div class="voice-controls">
+    <button class="btn btn-success" data-voice-join {% if not is_member or user.is_blocked %}disabled{% endif %}>Wejdz na glosowy</button>
+    <button class="btn btn-outline-light" data-voice-mute disabled>Wycisz mikrofon</button>
+    <button class="btn btn-danger" data-voice-leave disabled>Rozlacz</button>
+  </div>
+  <audio data-remote-audio autoplay playsinline></audio>
+  {% if user.is_blocked %}
+    <p class="voice-note">Twoje konto jest zablokowane i nie moze dołączac do rozmow.</p>
+  {% elif not is_member %}
+    <p class="voice-note">Najpierw dolacz do kanalu, potem wejdz na rozmowe glosowa.</p>
+  {% else %}
+    <p class="voice-note">Rozmowa dziala dla dwoch osob w tej samej przegladarce/serwerze. Przegladarka poprosi o dostep do mikrofonu.</p>
+  {% endif %}
+</section>
+{% endblock %}

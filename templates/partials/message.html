@@ -1,0 +1,32 @@
+<article class="message-row" id="message-{{ message.id }}">
+  <div class="avatar">
+    {% if message.author.avatar %}<img src="{{ message.author.avatar.url }}" alt="">{% else %}{{ message.author.username|first|upper }}{% endif %}
+  </div>
+  <div class="message-body">
+    <div class="message-meta">
+      <strong>{{ message.author.username }}</strong>
+      <time>{{ message.created_at|date:"H:i" }}</time>
+      {% if user.can_moderate or user == message.author %}
+        <form method="post" action="{% url 'delete_message' message.id %}" class="d-inline">
+          {% csrf_token %}
+          <button class="icon-link" title="Usun wiadomosc">usun</button>
+        </form>
+      {% endif %}
+    </div>
+    {% if message.is_deleted %}
+      <p class="deleted">[wiadomosc usunieta]</p>
+    {% else %}
+      {% if message.content %}<p>{{ message.content }}</p>{% endif %}
+      {% if message.image %}<img class="message-media" src="{{ message.image.url }}" alt="zalaczony obraz">{% endif %}
+      {% if message.audio %}<audio controls src="{{ message.audio.url }}"></audio>{% endif %}
+      <div class="reactions">
+        {% for symbol, users in message.reactions.items %}
+          {% if users %}<span>{{ symbol }} {{ users|length }}</span>{% endif %}
+        {% endfor %}
+        <form method="post" action="{% url 'react_message' message.id 'like' %}">{% csrf_token %}<button>👍</button></form>
+        <form method="post" action="{% url 'react_message' message.id 'heart' %}">{% csrf_token %}<button>❤️</button></form>
+        <form method="post" action="{% url 'react_message' message.id 'laugh' %}">{% csrf_token %}<button>😄</button></form>
+      </div>
+    {% endif %}
+  </div>
+</article>

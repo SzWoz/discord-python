@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="chat-header">
+  <div>
+    <h1>@ {{ other.username }}</h1>
+    <p>{% if other.is_online %}online{% else %}offline{% endif %}</p>
+  </div>
+  <a class="btn btn-outline-secondary" href="{% url 'report_user' other.id %}">Zglos</a>
+</header>
+<section class="chat-panel" data-chat-kind="dm" data-room-id="{{ thread.id }}">
+  <div class="message-list" id="message-list">
+    {% for message in messages_list %}
+      {% include "partials/message.html" %}
+    {% empty %}
+      <div class="empty-small">Napisz pierwsza wiadomosc prywatna.</div>
+    {% endfor %}
+  </div>
+  <form class="composer" method="post" enctype="multipart/form-data" action="{% url 'send_direct_message' thread.id %}" data-chat-form>
+    {% csrf_token %}
+    {{ message_form.content }}
+    <label class="file-pill">Obraz {{ message_form.image }}</label>
+    <label class="file-pill">Audio {{ message_form.audio }}</label>
+    <button class="btn btn-primary" {% if user.is_blocked %}disabled{% endif %}>Wyslij</button>
+  </form>
+</section>
+{% endblock %}

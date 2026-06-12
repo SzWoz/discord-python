@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="empty-state">
+  <h1>Brak kanalow</h1>
+  <p>Administrator moze utworzyc pierwszy kanal tekstowy.</p>
+  {% if user.can_administer %}<a class="btn btn-primary" href="{% url 'create_channel' %}">Utworz kanal</a>{% endif %}
+</section>
+{% endblock %}

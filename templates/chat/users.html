@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="chat-header">
+  <div>
+    <h1>Uzytkownicy i kanaly</h1>
+    <p>Wyszukiwanie, DM i administracja rolami.</p>
+  </div>
+  <form class="search-form">
+    <input class="form-control" name="q" value="{{ query }}" placeholder="Szukaj...">
+  </form>
+</header>
+<div class="directory-grid">
+  <section>
+    <h2>Uzytkownicy</h2>
+    {% for item in users_list %}
+      <div class="directory-row">
+        <span><span class="presence {% if item.is_online %}online{% endif %}"></span>{{ item.username }} <small>{{ item.get_role_display }}</small></span>
+        <span class="actions">
+          <a href="{% url 'direct_message' item.id %}">DM</a>
+          <a href="{% url 'report_user' item.id %}">Zglos</a>
+          {% if user.can_administer %}<a href="{% url 'edit_user_role' item.id %}">Role</a>{% endif %}
+        </span>
+      </div>
+    {% empty %}<p class="empty-small">Brak wynikow.</p>{% endfor %}
+  </section>
+  <section>
+    <h2>Kanaly</h2>
+    {% for item in channels_list %}
+      <a class="directory-row" href="{% if item.channel_type == 'voice' %}{% url 'voice_channel' item.id %}{% else %}{% url 'channel' item.id %}{% endif %}">
+        {% if item.channel_type == 'voice' %}🔊{% else %}#{% endif %} {{ item.name }} <small>{{ item.description }}</small>
+      </a>
+    {% empty %}<p class="empty-small">Brak wynikow.</p>{% endfor %}
+  </section>
+</div>
+{% endblock %}
